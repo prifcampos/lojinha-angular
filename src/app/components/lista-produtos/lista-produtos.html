@@ -1,1 +1,6 @@
-<p>lista-produtos works!</p>
+<h2>Lista de Produtos</h2>
+<div class="product-list-container">
+    @for (produto of produtos; track produto.id) {
+        <app-card-produto [produtoRecebido]="produto"></app-card-produto>
+    }
+</div>
