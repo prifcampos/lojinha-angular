@@ -4,7 +4,7 @@ import { Product } from '../../services/product';
 
 @Component({
   selector: 'app-lista-produtos',
-  imports: [],
+  imports: [CardProduto],
   templateUrl: './lista-produtos.html',
   styleUrl: './lista-produtos.css',
 })
