@@ -14,18 +14,26 @@ export class ListaProdutos implements OnInit {
   productService = inject(Product);
   cdr = inject(ChangeDetectorRef);
   cartService = inject(Cart);
+// variáveis
   produtos: any[] = [];
+  carregando: boolean = true;
 
   ngOnInit(): void {
     console.log('Pedindo produtos pra API...');
 
     // Precisamos nos INSCREVER no Observable para que a requisição aconteça
-    this.productService.getProducts().subscribe((dadosDaApi: any[]) => {
-      console.log("Os dados chegaram!");
-
-    // Pegamos a resposta da API e guardamos na nossa variável
-      this.produtos = dadosDaApi;
-      this.cdr.detectChanges();
+    this.productService.getProducts().subscribe({
+      next: (dadosDaApi: any[]) =>{
+        console.log('Os dados chegaram!', dadosDaApi);
+        this.produtos = dadosDaApi;
+        this.carregando = false; // desliga o carregando quando chegam os dados
+        this.cdr.detectChanges();
+      },
+      error: (erro: any) => {
+        console.error("Opa, deu ruim!", erro);
+        this.carregando = false; // desliga o carregando mesmo se der erro pra não travar a tela
+        alert("Erro ao buscar produtos");
+      },
     });
   }
 
