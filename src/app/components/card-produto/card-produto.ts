@@ -14,7 +14,7 @@ export class CardProduto {
   @Input() produtoRecebido!: any; 
   @Output() adicionar = new EventEmitter<any>();
 
-  clicouComprar() {
+  clicouComprar(): void {
     this.adicionar.emit(this.produtoRecebido);
   }
 }

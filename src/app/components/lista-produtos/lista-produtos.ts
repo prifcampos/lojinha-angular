@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CardProduto } from '../card-produto/card-produto';
 import { Product } from '../../services/product';
 import { Cart } from '../../services/cart';
@@ -11,18 +11,26 @@ import { Cart } from '../../services/cart';
 })
 export class ListaProdutos implements OnInit {
   // Injeção de dependência moderna
-  product = inject(Product);
+  productService = inject(Product);
+  cdr = inject(ChangeDetectorRef);
   cartService = inject(Cart);
   produtos: any[] = [];
 
   ngOnInit(): void {
-    console.log('funcionou')
-    this.produtos = this.product.getProducts();
+    console.log('Pedindo produtos pra API...');
+
+    // Precisamos nos INSCREVER no Observable para que a requisição aconteça
+    this.productService.getProducts().subscribe((dadosDaApi: any[]) => {
+      console.log("Os dados chegaram!");
+
+    // Pegamos a resposta da API e guardamos na nossa variável
+      this.produtos = dadosDaApi;
+      this.cdr.detectChanges();
+    });
   }
 
   receberProduto(produto: any) {
     console.log("Produto adicionado: ", produto.title);
-    // Simula a chama de API
     this.cartService.adicionar(produto);
   }
 }
